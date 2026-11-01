@@ -1,0 +1,34 @@
+# Contribution snake for the profile README, in the ABHAY palette, regenerated daily.
+# Platane/snk writes the SVGs; they are pushed to the `output` branch, which README.md embeds.
+name: snake
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  generate:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Generate the snake from the contribution graph
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          # color_dots: empty day, then four levels from fewest to most commits.
+          outputs: |
+            dist/snake-dark.svg?color_snake=#ff7eb3&color_dots=#161b2e,#1d3a5c,#21688a,#35a8b8,#7ff3f7
+            dist/snake-light.svg?color_snake=#d6336c&color_dots=#efe7d8,#c9ecee,#8fd6dc,#3fb0bb,#178f99
+
+      - name: Publish to the output branch
+        uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,6 @@
+# Only the profile itself is published: README.md, assets/ and the snake workflow.
+/*
+!/README.md
+!/assets/
+!/.github/
+!/.gitignore
